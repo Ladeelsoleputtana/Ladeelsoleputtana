@@ -7,4 +7,3 @@ def speeches(a,b,c,d,e,f,g,h):
     f = "Nomination_Mitterand1.txt"
     g = "Nomination_Mitterand2.txt"
     h = "Nomination_Sarkozy.txt"
-    Prénom=input("Enter a letter between a and h :")
