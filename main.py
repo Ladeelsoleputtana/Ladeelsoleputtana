@@ -1,4 +1,4 @@
-if __name__ == '__main__':
-    print_hi('PyCharm')
+from functions import *
+import os
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if __name__ == '__main__':
