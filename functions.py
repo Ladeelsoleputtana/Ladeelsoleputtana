@@ -9,7 +9,7 @@ def list_of_files(directory, extension):
 def mini(): #Fonction qui met en minuscule les fichiers et qui supprime les ponctuations qu'il faut
     liste = [",", '.', ':', ';', '!', '?', '"'] #Liste des ponctuations normales
     liste1 = ['-',"'"] #Liste de ponctuations spécifiques
-    with open("speeches/Nomination_{}.txt".format(),'r') as f,open("cleaned/Chirac1.txt", 'w') as f1: #Lecture des fichiers depuis le dossier speeches et Ecriture des nouveaux fichiers dans le dossier cleaned
+    with open("speeches/Nomination_{}.txt".format(),'r') as f,open("cleaned/{}.txt", 'w') as f1: #Lecture des fichiers depuis le dossier speeches et Ecriture des nouveaux fichiers dans le dossier cleaned
         contenu = f.readlines() #Lire chaque ligne
         for ligne in contenu: #Boucle pour que "ligne" soit dans le "contenu"
             for caractere in ligne: #Boucle pour que "caractere" soit dans le "ligne"
@@ -22,3 +22,8 @@ def mini(): #Fonction qui met en minuscule les fichiers et qui supprime les ponc
                     f1.write("") #Rien écrire
                 else:
                     f1.write(caractere) #Ecriture de la variable "caractere"
+
+def occurrence():
+    dico = {}
+    word = input("Write a word : ")
+    for i in range():
