@@ -24,6 +24,20 @@ def mini(): #Fonction qui met en minuscule les fichiers et qui supprime les ponc
                 else:
                     f1.write(caractere) #Ecriture de la variable "caractere"
 
+def rename():
+file_list = os.listdir(r"./speeches")
+del_car1 = '.txt'
+del_car2 = 'Nomination_'
+for i in range(len(file_list)):
+    file_list[i] = file_list[i].replace(del_car1, "")
+    file_list[i] = file_list[i].replace(del_car2, "")
+for j in range(len(file_list)):
+    file_list[j] = file_list[j].replace('1', "")
+    file_list[j] = file_list[j].replace('2', "")
+    if j > 0:
+        if file_list[j] != file_list[j - 1]:
+            print(file_list[j])
+
 def occurrence(chaine):
     dico = {}
     phrase = chaine.split()
