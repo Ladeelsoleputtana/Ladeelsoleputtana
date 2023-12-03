@@ -1,4 +1,5 @@
 import os
+import math
 
 def list_of_files(directory, extension):
     files_names = []
@@ -34,3 +35,4 @@ def occurrence(chaine):
             dico[mot] = 1
     return dico
 
+def IDF(t):
