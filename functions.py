@@ -7,23 +7,30 @@ def list_of_files(directory, extension):
             files_names.append(filename)
     return files_names
 
-# Call of the function
-directory = "./speeches"
-files_names = list_of_files(directory, "txt")
-print_list(files_names)
+def mini(): #Fonction qui met en minuscule les fichiers et qui supprime les ponctuations qu'il faut
+    liste = [",", '.', ':', ';', '!', '?', '"'] #Liste des ponctuations normales
+    liste1 = ['-',"'"] #Liste de ponctuations spécifiques
+    with open("speeches/Nomination_{}.txt".format(),'r') as f,open("cleaned/{}.txt".format(), 'w') as f1: #Lecture des fichiers depuis le dossier speeches et Ecriture des nouveaux fichiers dans le dossier cleaned
+        contenu = f.readlines() #Lire chaque ligne
+        for ligne in contenu: #Boucle pour que "ligne" soit dans le "contenu"
+            for caractere in ligne: #Boucle pour que "caractere" soit dans le "ligne"
+                if 65 <= ord(caractere) <= 90: #Condition pour vérifier si le caractere est entre 65 et 90 (Décimal des caracteres en Code ASCII) et Si c'est entre cette intervalle
+                    minuscule = caractere.lower() #Fonction qui convertit en minuscule
+                    f1.write(minuscule) #Ecriture de la variable "minuscule" dans f1
+                elif caractere in liste1: #Si caractere dans liste1 alors
+                    f1.write(" ") #Mettre un espace
+                elif caractere in liste: #Et si caractere dans liste alors
+                    f1.write("") #Rien écrire
+                else:
+                    f1.write(caractere) #Ecriture de la variable "caractere"
 
-def speeches(a,b,c,d,e,f,g,h):
-    a = "Nomination_Chirac1.txt"
-    b = "Nomination_Chirac2.txt"
-    c = "Nomination_Giscard dEstaing.txt"
-    d = "Nomination_Hollande.txt"
-    e = "Nomination_Macron.txt"
-    f = "Nomination_Mitterand1.txt"
-    g = "Nomination_Mitterand2.txt"
-    h = "Nomination_Sarkozy.txt"
+def occurrence(chaine):
+    dico = {}
+    phrase = chaine.split()
+    for mot in phrase:
+        if mot in dico:
+            dico[mot] += 1
+        else:
+            dico[mot] = 1
+    return dico
 
-    Prénom = input("Enter the name of a french president :")
-    if Prénom == 'Jacques':
-        x = int(input("which speech would you like to read ?"))
-        if x == 1:
-            with open("Nomination_Chirac1.txt")
