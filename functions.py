@@ -37,15 +37,15 @@ for j in range(len(file_list)):
     if j > 0:
         if file_list[j] != file_list[j - 1]:
             if "Giscard" in file_list[j]:
-                file_list[j] = "valery " + file_list[j]
+                file_list[j] = "Valery " + file_list[j]
             if "Hollande" in file_list[j]:
-                file_list[j] = "francois " + file_list[j]
+                file_list[j] = "Francois " + file_list[j]
             if "Macron" in file_list[j]:
-                file_list[j] = "emmanuel " + file_list[j]
+                file_list[j] = "Emmanuel " + file_list[j]
             if "Mitterrand" in file_list[j]:
-                file_list[j] = "francois " + file_list[j]
+                file_list[j] = "Francois " + file_list[j]
             if "Sarkozy" in file_list[j]:
-                file_list[j] = "nicolas " + file_list[j]
+                file_list[j] = "Nicolas " + file_list[j]
             print(file_list[j])
 
 def occurrence(chaine):
