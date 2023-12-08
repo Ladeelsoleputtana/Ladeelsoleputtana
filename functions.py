@@ -33,9 +33,6 @@ def rename(repertoir):
             file_list[j] = "Jacques " + file_list[j]
 
 
-    mini(repertoir, file_list)
-
-
 def clean(repertoir):
     rename(repertoir)
 
