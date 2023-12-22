@@ -1,4 +1,5 @@
 import os
+import math
 
 def list_of_files(directory, extension):
     files_names = []
@@ -31,11 +32,8 @@ def rename(repertoir):
             file_list[j] = "Nicolas " + file_list[j]
         if "Chirac" in file_list[j]:
             file_list[j] = "Jacques " + file_list[j]
-
-
-    mini(repertoir, file_list)
-
-
+    for i in range(len(os.listdir("cleaned/"))):
+        print(os.listdir("cleaned/")[i].replace(".txt",""))
 def clean(repertoir):
     rename(repertoir)
 
@@ -81,12 +79,29 @@ def mini(repertoir, file_list): #Fonction qui met en minuscule les fichiers et q
 clean("speeches/")
 
 def TF(chaine):
-    dico = {}
-    phrase = chaine.split()
-    for mot in phrase:
+    dico = {} #Dictionnaire vide
+    phrase = chaine.split() #
+    for mot in phrase: #Boucle
         if mot in dico:
             dico[mot] += 1
         else:
             dico[mot] = 1
     return dico
 
+def repetition():
+    mots = {}
+    president = input("Enter a name of a president : ")
+    while president != "Chirac":
+        president = input("Enter a name of a president : ")
+
+    with open("cleaned/Jacques Chirac.txt",'r',encoding='utf-8') as f3:
+        contenu = f3.read()
+        lignes = contenu.split()
+        for mot in lignes:
+            if mot in mots:
+                mots[mot] += 1
+            else:
+                mots[mot] = 1
+    dico = dict(sorted(mots.items(), key=lambda item: item[1], reverse=True))
+    print(next(iter(dico.items())))
+    return mots
