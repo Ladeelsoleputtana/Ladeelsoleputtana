@@ -12,5 +12,8 @@ print(Tf)
 Idf = IDF()
 print(Idf)
 
+Tf_Idf = TF_IDF(Tf,Idf)
+print(Tf_Idf)
+
 
 repetition()

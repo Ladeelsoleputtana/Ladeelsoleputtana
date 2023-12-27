@@ -69,7 +69,7 @@ def mini(repertoir, file_list): # Fonction qui met en minuscule les fichiers et 
 
 def TF():
     dico = {}
-    dico_tf = {}
+    dico_score_tf = {}
     nb_total = 0
     for i in os.listdir("cleaned/"):
         with open("cleaned/" + i,'r',encoding='utf-8') as f:
@@ -84,8 +84,8 @@ def TF():
                         dico[mot] = 1
                         nb_total += 1
     for j in dico:
-        dico_tf[j] = dico[j]/nb_total
-    return dico_tf
+        dico_score_tf[j] = dico[j]/nb_total
+    return dico_score_tf
 
 def IDF():
     dico_total_idf = {}
@@ -125,7 +125,11 @@ def IDF():
         dico_score_idf[i] = math.log10(len(os.listdir("cleaned/"))/dico_corpus_occ[i])
     return dico_score_idf
 
-
+def TF_IDF(dico_score_idf,dico_score_tf):
+    dico_score_final = {}
+    for mot in dico_score_tf:
+        dico_score_final[mot] = dico_score_tf[mot] * dico_score_idf[mot]
+    return dico_score_final
 
 def repetition():
     mots = {}
