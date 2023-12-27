@@ -1,5 +1,6 @@
 import os
 import math
+from tabulate import tabulate
 
 def list_of_files(directory, extension):
     files_names = []
@@ -130,6 +131,32 @@ def TF_IDF(dico_score_idf,dico_score_tf):
     for mot in dico_score_tf:
         dico_score_final[mot] = dico_score_tf[mot] * dico_score_idf[mot]
     return dico_score_final
+
+def TF_IDF_Chaque_Doc(dico_score_idf):
+    dico = {}
+    nb_total = 0
+    for president in os.listdir("cleaned/"): # Boucle pour l'occurrence de chaque mot dans chaque fichier
+        dico_Chaque_Doc = {}
+        with open("cleaned/" + president, 'r', encoding='utf-8') as f:
+            contenu = f.readlines()
+            for ligne in contenu:
+                a = ligne.split()
+                for mot in a:
+                    if mot in dico:
+                        dico_Chaque_Doc[mot] += 1
+                        nb_total += 1
+                    else:
+                        dico_Chaque_Doc[mot] = 1
+                        nb_total += 1
+        dico[president] = dico_Chaque_Doc #Chaque fichier a son propre dictionnaire
+    dico2 = {}
+    for president in dico: # Boucle qui calcule tf idf de chaque mot dans chaque fichier
+        dico1 = {}
+        for mot in dico[president]:
+            dico1[mot] = (dico[president][mot]/nb_total) * dico_score_idf[mot] #Calculer le tf idf d'un mot dans un fichier
+        dico2[president] = dico1
+    return dico2
+
 
 def repetition():
     mots = {}

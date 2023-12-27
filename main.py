@@ -15,5 +15,9 @@ print(Idf)
 Tf_Idf = TF_IDF(Tf,Idf)
 print(Tf_Idf)
 
+chaque_doc = TF_IDF_Chaque_Doc(Idf)
+print(chaque_doc)
+
+
 
 repetition()
