@@ -71,7 +71,7 @@ def mini(repertoir, file_list): # Fonction qui met en minuscule les fichiers et 
 def TF():
     dico = {}
     dico_score_tf = {}
-    nb_total = 0
+    nb_total = 0 # Nombre total de mots dans le dossier
     for i in os.listdir("cleaned/"):
         with open("cleaned/" + i,'r',encoding='utf-8') as f:
             contenu = f.readlines()
@@ -84,12 +84,12 @@ def TF():
                     else:
                         dico[mot] = 1
                         nb_total += 1
-    for j in dico:
-        dico_score_tf[j] = dico[j]/nb_total
+    for mot in dico: # Chercher mot dans dico
+        dico_score_tf[mot] = dico[mot]/nb_total
     return dico_score_tf
 
 def IDF():
-    dico_total_idf = {}
+    dico_total_idf = {} # Dictionnaire
     for i in os.listdir("cleaned/"): # Boucle pour calculer tous les mots pour chaque fichier
         dico_idf = {} #Dictionnaire vide
         with open("cleaned/"+ i,'r',encoding='utf-8') as f: # Lire chaque fichier dans le dossier cleaned
@@ -103,7 +103,7 @@ def IDF():
                         dico_idf[mot] = 1
         dico_total_idf[i] = dico_idf
     dico = {}
-    for i in os.listdir("cleaned/"): #Boucle pour calculer tous les mots différents dans tous le corpus
+    for i in os.listdir("cleaned/"): # Boucle pour calculer tous les mots différents dans tout le dossier
         with open("cleaned/" + i,'r',encoding='utf-8') as f:
             contenu = f.readlines()
             for ligne in contenu:
@@ -114,16 +114,16 @@ def IDF():
                     else:
                         dico[mot] = 1
     dico_corpus_occ = {}
-    for i in dico:
+    for mot in dico: # Boucle pour calculer le nombre de documents comportant un mot
         for president in dico_total_idf:
-            if i in dico_total_idf[president]:
-                if i in dico_corpus_occ:
-                    dico_corpus_occ[i] += 1
+            if mot in dico_total_idf[president]:
+                if mot in dico_corpus_occ:
+                    dico_corpus_occ[mot] += 1
                 else:
-                    dico_corpus_occ[i] = 1
+                    dico_corpus_occ[mot] = 1
     dico_score_idf = {}
-    for i in dico_corpus_occ:
-        dico_score_idf[i] = math.log10(len(os.listdir("cleaned/"))/dico_corpus_occ[i])
+    for mot in dico_corpus_occ:
+        dico_score_idf[mot] = math.log10(len(os.listdir("cleaned/"))/dico_corpus_occ[mot]) #Appliquer la formule
     return dico_score_idf
 
 def TF_IDF(dico_score_idf,dico_score_tf):
@@ -149,14 +149,50 @@ def TF_IDF_Chaque_Doc(dico_score_idf):
                         dico_Chaque_Doc[mot] = 1
                         nb_total += 1
         dico[president] = dico_Chaque_Doc #Chaque fichier a son propre dictionnaire
+    dico_nb_total = {}
+    for president in os.listdir('cleaned/'):
+        dico_nb_mot_par_fichier = 0
+        with open("cleaned/" + president, 'r', encoding='utf-8') as f:
+            contenu = f.readlines()
+            for ligne in contenu:
+                a = ligne.split()
+                dico_nb_mot_par_fichier += len(a)
+        dico_nb_total[president] = dico_nb_mot_par_fichier
     dico2 = {}
-    for president in dico: # Boucle qui calcule tf idf de chaque mot dans chaque fichier
+    for president in dico:
         dico1 = {}
-        for mot in dico[president]:
-            dico1[mot] = (dico[president][mot]/nb_total) * dico_score_idf[mot] #Calculer le tf idf d'un mot dans un fichier
+        for mot in dico[president]: # Boucle qui calcule tf idf de chaque mot dans chaque fichier
+            dico1[mot] = (dico[president][mot]/dico_nb_total[president]) * dico_score_idf[mot] #Calculer le tf idf d'un mot dans un fichier
         dico2[president] = dico1
     return dico2
 
+def matrice_tf_idf(dico2):
+    dico = {}
+    for i in os.listdir("cleaned/"): #Boucle pour calculer l'occurrence de chaque mot
+        with open("cleaned/" + i, 'r', encoding='utf-8') as f:
+            contenu = f.readlines()
+            for ligne in contenu:
+                a = ligne.split()
+                for mot in a:
+                    if mot in dico:
+                        dico[mot] += 1
+                    else:
+                        dico[mot] = 1
+
+    liste = []
+    liste1 = ['Mots']
+    for i in os.listdir('cleaned/'):
+        liste1.append(i)
+    liste.append(liste1)
+    for mot in dico:
+        liste2 = [mot]
+        for president in dico2:
+            if mot in dico2[president]:
+                liste2.append(dico2[president][mot])
+            else:
+                liste2.append(0)
+        liste.append(liste2)
+    return tabulate(liste)
 
 def repetition():
     mots = {}

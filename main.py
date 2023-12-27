@@ -18,6 +18,7 @@ print(Tf_Idf)
 chaque_doc = TF_IDF_Chaque_Doc(Idf)
 print(chaque_doc)
 
-
+matrice = matrice_tf_idf(chaque_doc)
+print(matrice)
 
 repetition()
