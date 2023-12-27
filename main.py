@@ -6,6 +6,11 @@ print(files_names)
 
 rename("./speeches")
 
-TF()
+Tf = TF()
+print(Tf)
+
+Idf = IDF()
+print(Idf)
+
 
 repetition()

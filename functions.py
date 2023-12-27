@@ -85,7 +85,45 @@ def TF():
                         nb_total += 1
     for j in dico:
         dico_tf[j] = dico[j]/nb_total
-    print(dico_tf)
+    return dico_tf
+
+def IDF():
+    dico_total_idf = {}
+    for i in os.listdir("cleaned/"): # Boucle pour calculer tous les mots pour chaque fichier
+        dico_idf = {} #Dictionnaire vide
+        with open("cleaned/"+ i,'r',encoding='utf-8') as f: # Lire chaque fichier dans le dossier cleaned
+            contenu = f.readlines()
+            for ligne in contenu:
+                a = ligne.split() # Variable pour faire une liste de mots pour chaque ligne
+                for mot in a:
+                    if mot in dico_idf:
+                        dico_idf[mot] += 1
+                    else:
+                        dico_idf[mot] = 1
+        dico_total_idf[i] = dico_idf
+    dico = {}
+    for i in os.listdir("cleaned/"): #Boucle pour calculer tous les mots différents dans tous le corpus
+        with open("cleaned/" + i,'r',encoding='utf-8') as f:
+            contenu = f.readlines()
+            for ligne in contenu:
+                a = ligne.split()
+                for mot in a:
+                    if mot in dico:
+                        dico[mot] += 1
+                    else:
+                        dico[mot] = 1
+    dico_corpus_occ = {}
+    for i in dico:
+        for president in dico_total_idf:
+            if i in dico_total_idf[president]:
+                if i in dico_corpus_occ:
+                    dico_corpus_occ[i] += 1
+                else:
+                    dico_corpus_occ[i] = 1
+    dico_score_idf = {}
+    for i in dico_corpus_occ:
+        dico_score_idf[i] = math.log10(len(os.listdir("cleaned/"))/dico_corpus_occ[i])
+    return dico_score_idf
 
 
 
