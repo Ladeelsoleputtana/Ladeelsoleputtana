@@ -6,8 +6,6 @@ print(files_names)
 
 rename("./speeches")
 
-chaine = "le chat a cru voir un autre chat mais non ce n'était pas un chat mais un chien"
-result = TF(chaine)
-print(result)
+TF()
 
 repetition()
