@@ -172,6 +172,15 @@ class Part1:
                 liste.append(mot)
         print("Les mots dits non importants sont : ",liste)
 
+    def score_haut(self):
+        liste=[]
+        mots_importants = sorted(self.dico_score_final.items(),key=lambda item:item[1],reverse=True) #
+        liste.append(mots_importants[0])
+        for i in range(len(mots_importants)):
+            if mots_importants[i] == mots_importants[0]:
+                liste.append(mots_importants[i])
+        liste.pop(0)
+        print("Le mot ayant le score TF IDF le plus élevé est :",liste)
 
     def repetition(self):
         mots = {}

@@ -17,4 +17,8 @@ print(matrice)
 
 part1.non_important()
 
+part1.score_haut()
+
+
+
 part1.repetition()
