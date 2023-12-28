@@ -13,6 +13,8 @@ class Part1:
         self.dico3 = {}
 
 
+
+
     def rename(self):
         self.file_list = os.listdir(self.repertoir) #Attribuer une liste de documents à la variable file_list venant du repertoir
         del_car1 = '.txt' #Caractere1 à supprimer
@@ -201,12 +203,6 @@ class Part1:
         print(b,a)
 
     def Nation(self):
-        mots = {}
-        with open("cleaned/{}",'r') as f:
-            contenu = f.read()
-            lignes = contenu.split()
-            for mot in lignes:
-                if mot == "nation":
-                    mots[mot] += 1
-                else:
-                    mots[mot] = 1
+        for president in os.listdir('cleaned/'):
+            if "nation" in self.dico3[president]:
+                print(president, ":", self.dico3[president]["nation"])
