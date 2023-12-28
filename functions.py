@@ -10,6 +10,7 @@ class Part1:
         self.dico = {}
         self.dico_score_final = {}
         self.dico2 = {}
+        self.dico3 = {}
 
 
     def rename(self):
@@ -118,7 +119,6 @@ class Part1:
             self.dico_score_final[mot] = self.dico_score_tf[mot] * self.dico_score_idf[mot]
 
     def TF_IDF_Chaque_Doc(self):
-        dico = {}
         nb_total = 0
         for president in os.listdir("cleaned/"): # Boucle pour l'occurrence de chaque mot dans chaque fichier
             dico_Chaque_Doc = {}
@@ -127,13 +127,13 @@ class Part1:
                 for ligne in contenu:
                     a = ligne.split()
                     for mot in a:
-                        if mot in dico:
+                        if mot in dico_Chaque_Doc:
                             dico_Chaque_Doc[mot] += 1
                             nb_total += 1
                         else:
                             dico_Chaque_Doc[mot] = 1
                             nb_total += 1
-            dico[president] = dico_Chaque_Doc #Chaque fichier a son propre dictionnaire
+            self.dico3[president] = dico_Chaque_Doc #Chaque fichier a son propre dictionnaire
         dico_nb_total = {}
         for president in os.listdir('cleaned/'):
             dico_nb_mot_par_fichier = 0
@@ -143,10 +143,10 @@ class Part1:
                     a = ligne.split()
                     dico_nb_mot_par_fichier += len(a)
             dico_nb_total[president] = dico_nb_mot_par_fichier
-        for president in dico:
+        for president in self.dico3:
             dico1 = {}
-            for mot in dico[president]: # Boucle qui calcule tf idf de chaque mot dans chaque fichier
-                dico1[mot] = (dico[president][mot]/dico_nb_total[president]) * self.dico_score_idf[mot] #Calculer le tf idf d'un mot dans un fichier
+            for mot in self.dico3[president]: # Boucle qui calcule tf idf de chaque mot dans chaque fichier
+                dico1[mot] = (self.dico3[president][mot]/dico_nb_total[president]) * self.dico_score_idf[mot] #Calculer le tf idf d'un mot dans un fichier
             self.dico2[president] = dico1
 
     def matrice_tf_idf(self):
@@ -173,7 +173,7 @@ class Part1:
         print("Les mots dits non importants sont : ",liste)
 
     def score_haut(self):
-        liste=[]
+        liste = []
         mots_importants = sorted(self.dico_score_final.items(),key=lambda item:item[1],reverse=True) #
         liste.append(mots_importants[0])
         for i in range(len(mots_importants)):
@@ -183,22 +183,22 @@ class Part1:
         print("Le mot ayant le score TF IDF le plus élevé est :",liste)
 
     def repetition(self):
-        mots = {}
         president = input("Enter a name of a president : ")
         while president != "Chirac":
             president = input("Enter a name of a president : ")
 
-        with open("cleaned/Jacques Chirac.txt",'r',encoding='utf-8') as f3:
-            contenu = f3.read()
-            lignes = contenu.split()
-            for mot in lignes:
-                if mot in mots:
-                    mots[mot] += 1
-                else:
-                    mots[mot] = 1
-        dico = dict(sorted(mots.items(), key=lambda item: item[1], reverse=True))
-        print(next(iter(dico.items())))
-        return mots
+        a = 0
+        b = " "
+        liste = []
+
+        for mot in self.dico3[os.listdir('cleaned/')[3]]:
+            if self.dico_score_idf[mot] != 0:
+                liste.append(mot)
+        for mot in liste:
+            if self.dico3[os.listdir('cleaned/')[3]][mot] > a:
+                a = self.dico3[os.listdir('cleaned/')[3]][mot]
+                b = mot
+        print(b,a)
 
     def Nation(self):
         mots = {}
