@@ -203,6 +203,14 @@ class Part1:
         print(b,a)
 
     def Nation(self):
+        print("Les présidents qui ont parlé de nation sont ")
         for president in os.listdir('cleaned/'):
             if "nation" in self.dico3[president]:
                 print(president, ":", self.dico3[president]["nation"])
+
+    def climat_eco(self):
+        for president in os.listdir('cleaned/'):
+            if 'climat' in self.dico3[president]:
+                print("Les présidents qui ont parlé de climat sont ",president, ":", self.dico3[president]['climat'])
+            elif 'écologie' in self.dico3[president]:
+                print("Les présidents qui ont parlé de écologie sont ",president,':', self.dico3[president]['écologie'])
