@@ -180,7 +180,7 @@ class Part1:
             if mots_importants[i] == mots_importants[0]:
                 liste.append(mots_importants[i])
         liste.pop(0)
-        print("Le mot ayant le score TF IDF le plus élevé est :",liste)
+        print("Le mot ayant le score TF IDF le plus élevé est :", liste)
 
     def repetition(self):
         president = input("Enter a name of a president : ")
