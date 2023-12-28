@@ -15,4 +15,6 @@ part1.TF_IDF_Chaque_Doc()
 matrice = part1.matrice_tf_idf()
 print(matrice)
 
+part1.non_important()
+
 part1.repetition()

@@ -89,7 +89,7 @@ class Part1:
 
 
     def IDF(self):
-        dico_total_idf = {} # Dictionnaire
+        dico_total_idf = {}
         for i in os.listdir("cleaned/"): # Boucle pour calculer tous les mots pour chaque fichier
             dico_idf = {} #Dictionnaire vide
             with open("cleaned/"+ i,'r',encoding='utf-8') as f: # Lire chaque fichier dans le dossier cleaned
@@ -165,6 +165,12 @@ class Part1:
             liste.append(liste2)
         return tabulate(liste)
 
+    def non_important(self):
+        liste = []
+        for mot in self.dico_score_idf:
+            if self.dico_score_idf[mot] == 0:
+                liste.append(mot)
+        print("Les mots dits non importants sont : ",liste)
 
 
     def repetition(self):
