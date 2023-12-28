@@ -1,24 +1,18 @@
 from functions import *
 
-directory = "./speeches"
-files_names = list_of_files(directory, "txt")
-print(files_names)
+part1 = Part1('./speeches')
 
-rename("./speeches")
+part1.rename()
 
-Tf = TF()
-print(Tf)
+part1.TF()
 
-Idf = IDF()
-print(Idf)
+part1.IDF()
 
-Tf_Idf = TF_IDF(Tf,Idf)
-print(Tf_Idf)
+part1.TF_IDF()
 
-chaque_doc = TF_IDF_Chaque_Doc(Idf)
-print(chaque_doc)
+part1.TF_IDF_Chaque_Doc()
 
-matrice = matrice_tf_idf(chaque_doc)
+matrice = part1.matrice_tf_idf()
 print(matrice)
 
-repetition()
+part1.repetition()
