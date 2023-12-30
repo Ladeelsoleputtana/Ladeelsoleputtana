@@ -211,3 +211,23 @@ class Part1:
                 print("Les présidents qui ont parlé de climat sont ",president, ":", self.dico3[president]['climat'])
             elif 'écologie' in self.dico3[president]:
                 print("Les présidents qui ont parlé de écologie sont ",president,':', self.dico3[president]['écologie'])
+
+    def trav(contenu):
+        nv_contenu = ""
+        for lettre in contenu :
+            if 65 <= ord(lettre) <=  90 :
+                nv_contenu += chr(ord(lettre)+32)
+            elif (33 <= ord(lettre) <= 47) or (58 <= ord(lettre) <= 63) or (91 <= ord(lettre) <= 96) or (123 <= ord(lettre) <= 126):
+                nv_contenu += " "
+            else:
+                nv_contenu += lettre
+        return nv_contenu 
+
+def tokenisation(question):
+    question_trav = trav(question)
+    liste = question_trav.split()
+    liste_v=[]
+    for val in liste:
+        if val not in liste_v:
+            liste_v.append(val)
+    return liste_v
