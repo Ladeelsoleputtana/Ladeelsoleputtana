@@ -231,3 +231,19 @@ def tokenisation(question):
         if val not in liste_v:
             liste_v.append(val)
     return liste_v
+
+def motquestioncorpus(question):
+    tokenistion(question)
+        for i in os.listdir("cleaned/"):
+            with open("cleaned/" + i,'r',encoding='utf-8') as f:
+                contenu = f.readlines()
+                for ligne in contenu:
+                    liste_u = ligne.split()
+        liste_t = []
+        for j in range(len(liste_v)):
+            for h in range(len(liste_u)):
+                if liste_v[j] == liste_u[j]:
+                    if liste_v[j] not in liste_t:
+                        liste_t.append(liste_v[j])
+        return(liste_t)
+
