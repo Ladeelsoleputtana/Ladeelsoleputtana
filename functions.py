@@ -231,3 +231,61 @@ def tokenisation(question):
         if val not in liste_v:
             liste_v.append(val)
     return liste_v
+
+def idf(repertoir):
+    fichiers= os.listdir(repertoir)
+    dico_idf={}
+    liste_texte=[]
+    liste_bis=[]
+    nb=len(fichiers)
+    for nom in fichiers:
+        with open(os.path.join(repertoir,nom),"r",encoding='utf-8')as f:
+            contenu= f.read()
+            liste_mot=contenu.split()
+        liste_texte.append(liste_mot)
+    for liste in liste_texte:
+        nvliste=[]
+        for val in liste:
+            if val not in nvliste:
+                nvliste.append(val)
+        liste_bis.append(nvliste)
+    for liste in liste_bis:
+        for mot in liste:
+            if mot not in dico_idf.keys():
+                dico_idf[mot]=1
+            else:
+                dico_idf[mot]+=1
+def vecteur_question(question,repertoir):
+    idf_c=idf(repertoir)
+    tf_q= tf_question(question)
+    vecteur_tf_idf={}
+    for key in idf_c.items():
+        if key not in tf_q.keys():
+            vecteur_tf_idf[key]=0
+
+    for key, val in  tf_q.items():
+        for key2, val2 in idf_c.items():
+            if key == key2:
+                vecteur_tf_idf[key]=val*val2
+    return vecteur_tf_idf
+
+def produit_scalaire(A,B):
+    prod = 0
+    for i in range(len(A)):
+        prod += A[i] * B[i]
+    return prod
+
+def norme(L):
+    norme = 0
+    for i in range(len(L)):
+        norme += L[i] **2
+    norme = sqrt(norme)
+    return norme
+
+def similarité(A, B):
+    prod = produit_scalaire(A,B)
+    norme_A = norme(A)
+    norme_B = norme(B)
+    similariter = prod/(norme_A * norme_B)
+    return similariter
+
