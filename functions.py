@@ -1,6 +1,9 @@
 import os
 import math
 from tabulate import tabulate
+from math import *
+from math import sqrt
+
 
 class Part1:
     def __init__(self,repertoir):
@@ -231,3 +234,22 @@ def tokenisation(question):
         if val not in liste_v:
             liste_v.append(val)
     return liste_v
+
+
+
+def occur(texte):
+    liste_mot=texte.split()
+    dico_occur={}
+    for val in liste_mot:
+        if val not in dico_occur.keys():
+            dico_occur[val]=1
+        else: 
+            dico_occur[val]+=1
+    return dico_occur
+
+def tf_question(question):
+    dico_tf=occur(question)
+    nb = len(question.split())
+    for key, val in dico_tf.items():
+        dico_tf[key]=val/nb
+    return dico_tf
