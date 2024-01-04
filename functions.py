@@ -78,12 +78,11 @@ class Part1:
                 for ligne in contenu:
                     a = ligne.split()
                     for mot in a:
+                        nb_total += 1
                         if mot in self.dico:
                             self.dico[mot] += 1
-                            nb_total += 1
                         else:
                             self.dico[mot] = 1
-                            nb_total += 1
         for mot in self.dico: # Chercher mot dans dico
             self.dico_score_tf[mot] = self.dico[mot]/nb_total
 
@@ -211,6 +210,7 @@ class Part1:
                 print("Les présidents qui ont parlé de climat sont ",president, ":", self.dico3[president]['climat'])
             elif 'écologie' in self.dico3[president]:
                 print("Les présidents qui ont parlé de écologie sont ",president,':', self.dico3[president]['écologie'])
+class Part2:
 
     def trav(contenu):
         nv_contenu = ""
@@ -223,11 +223,11 @@ class Part1:
                 nv_contenu += lettre
         return nv_contenu 
 
-def tokenisation(question):
-    question_trav = trav(question)
-    liste = question_trav.split()
-    liste_v=[]
-    for val in liste:
-        if val not in liste_v:
-            liste_v.append(val)
-    return liste_v
+    def tokenisation(question):
+        question_trav = trav(question)
+        liste = question_trav.split()
+        liste_v=[]
+        for val in liste:
+            if val not in liste_v:
+                liste_v.append(val)
+        return liste_v
