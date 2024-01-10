@@ -353,4 +353,45 @@ class Part2:
             ligneM = []
             for ligne in range(len(self)):
                 ligneM.append(self[ligne][nbCol])
-            r.append(ligneM)"""
+            r.append(ligneM)
+
+
+    def mot_question_important(self, repertoir):
+        matrice = self.transposee(self.matrice_tf_idf(repertoir))
+        tf_idf_question = self.calcul_vecteur_tf_idf(self,self.transposee(self.matrice_tf_idf(repertoir)))
+        max = 0
+        for i in range(len(tf_idf_question)):
+            if tf_idf_question[i] > max:
+                max = tf_idf_question[i]
+                indice = i+1
+        return matrice[indice][0]
+    
+    def phrase_reponse(self):
+        mot_pertinent = self.mot_question_important(self,'cleaned')
+        doc_pertinent = self.proximite(self,'cleaned')
+        liste_phrase = []
+        contenu_vrai = ""
+        phrase_pertinente = []
+        with open(os.path.join('speeches',doc_pertinent),"r",encoding='utf-8') as doc:
+            contenu = doc.read()
+            for car in contenu:
+                if car != '\n':
+                    contenu_vrai += car
+            phrases=contenu_vrai.split(".")
+            for phrase in phrases:
+                if mot_pertinent in phrase:
+                    phrase_pertinente.append(phrase) """
+        return phrase_pertinente[0]
+    
+    def affiner_reponse(self):
+        question_deca = self.trav(self)
+        reponse_base = self.phrase_reponse(self)
+        if reponse_base[len(reponse_base) -1] != '.':
+            reponse_base += '.'
+        if 'comment' in question_deca:
+            reponse_affine = 'Après analyse,'
+        if 'pourquoi' in question_deca:
+            reponse_affine = 'Car'
+        if 'peux tu' in question_deca:
+            reponse_affine = 'Oui, bien-sûr!'
+        reponse_affine += " " + reponse_base
