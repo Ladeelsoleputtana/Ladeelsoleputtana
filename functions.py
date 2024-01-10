@@ -1,6 +1,9 @@
 import os
 import math
 from tabulate import tabulate
+from math import *
+from math import sqrt
+
 
 class Part1:
     def __init__(self,repertoir):
@@ -231,3 +234,227 @@ class Part2:
             if val not in liste_v:
                 liste_v.append(val)
         return liste_v
+
+    def liste_fichier(repertoir,extension):
+        noms=[]
+        for nom in os.listdir(repertoir):
+            if nom.endswith(extension):
+                noms.append(nom)
+        return noms
+    
+    if not os.path.exists('cleaned'):
+        os.mkdir('cleaned')
+        cleaned_dir='cleaned'
+        liste=liste_fichier('speeches','txt')
+        for nom in liste:
+            nv_fichier=os.path.join(cleaned_dir,nom)
+            with open(os.path.join("speeches",nom),"r") as speeches, open(nv_fichier,"w") as cleaned_fichier:
+                for ligne in speeches:
+                    nv_ligne=trav(ligne)
+                    cleaned_fichier.write(nv_ligne)
+    
+    
+    def occur(texte):
+        liste_mot=texte.split()
+        dico_occur={}
+        for val in liste_mot:
+            if val not in dico_occur.keys():
+                dico_occur[val]=1
+            else: 
+                dico_occur[val]+=1
+        return dico_occur
+    
+    def tf(fichier):
+        with open(fichier,"r",encoding='utf-8') as f:
+            txt = f.read()
+            nb= len(txt.split())
+            dict_occ = occur(txt)
+            for cle, val in dict_occ.items():
+                dict_occ[cle]= val/nb
+        return dict_occ
+    
+    def idf(repertoir):
+        fichiers= os.listdir(repertoir)
+        dico_idf={}
+        liste_texte=[]
+        liste_bis=[]
+        nb=len(fichiers)
+        for nom in fichiers:
+            with open(os.path.join(repertoir,nom),"r",encoding='utf-8')as f:
+                contenu= f.read()
+                liste_mot=contenu.split()
+            liste_texte.append(liste_mot)
+        for liste in liste_texte:
+            nvliste=[]
+            for val in liste:
+                if val not in nvliste:
+                    nvliste.append(val)
+            liste_bis.append(nvliste)
+        for liste in liste_bis:
+            for mot in liste:
+                if mot not in dico_idf.keys():
+                    dico_idf[mot]=1
+                else:
+                    dico_idf[mot]+=1
+    
+        for cle, val in dico_idf.items():
+            dico_idf[cle]=log((nb/val),10)
+        return dico_idf
+    
+    
+    def transposee(matrice): 
+        r=[]
+        for nbCol in range(len(matrice[0])):
+            ligneM=[]
+            for ligne in range(len(matrice)):
+                ligneM.append(matrice[ligne][nbCol])
+            r.append(ligneM)
+        return r
+    
+    def matrice_tf_idf(repertoir):
+        matrice=[]
+        mots = list(idf(repertoir).keys())
+        ligne_mot=["mots:"]
+        for mot in mots:
+            ligne_mot.append(mot)
+        matrice.append(ligne_mot)
+        s_idf = idf(repertoir)
+        for fichier in liste_fichier(repertoir,extension="txt"):
+            colonne=[fichier]
+            fichier='cleaned/'+fichier
+            s_tf=tf(fichier)
+            s_tf_idf={}
+            for mot in s_idf.keys():
+                if mot in s_tf.keys():
+                    s_tf_idf[mot]=s_tf[mot]*s_idf[mot]
+                else:
+                    s_tf_idf[mot]= 0.0
+            ligne_tf_idf=colonne
+            for score in s_tf_idf.values():
+                ligne_tf_idf.append(score)
+            matrice.append(ligne_tf_idf)
+        return matrice
+    
+    def tokenisation(question):
+        question_trav = trav(question)
+        liste = question_trav.split()
+        liste_v=[]
+        for val in liste:
+            if val not in liste_v:
+                liste_v.append(val)
+        return liste_v
+    
+    
+    
+    def motquestioncorpus(question,repertoir):
+        liste_v = tokenisation(question)
+        fichiers= os.listdir(repertoir)
+        liste_texte=[]
+        contenu_global=[]
+        liste_mot_commun =[]
+        for nom in fichiers:
+            with open(os.path.join(repertoir,nom),"r",encoding='utf-8') as f:
+                contenu = f.read()
+                liste_texte = contenu.split()
+            contenu_global += liste_texte
+        for i in range(len(liste_v)):
+            if liste_v[i] in contenu_global:
+                liste_mot_commun.append(liste_v[i])
+        return liste_mot_commun
+      
+    
+    
+    
+    def tf_question(question):
+        dico_tf=occur(question)
+        nb = len(question.split())
+        for key, val in dico_tf.items():
+            dico_tf[key]=val/nb
+        return dico_tf
+    
+    
+    def calcul_vecteur_tf_idf(question,matrice): #renvoie le vecteur sous forme de liste
+        """Cette fonction prend en paramètre la question et la matriceTFIDF du répertoire et renvoie le vecteur TF_IDF
+        de la question sous forme de liste. On note que l'ordre des TF_IDF correspond à l'ordre de ceux de la matrice"""
+        dico_idf = idf('cleaned') # Dictionnaire contenant l'IDF des mots du répetoire cleaned
+        dico_tf = tf_question(trav(question)) # Dictionnaire contenant le TF des mots de la question convertie en minuscule et sans caractère spéciaux
+        vecteur_question=[]
+        liste_question= tokenisation(question) # Liste contenant tous les mots de la question (en minuscule)
+        for i in range(1,len(matrice)):
+            if matrice[i][0] in liste_question: # Si le premier terme de la sous liste de la matrice soit le mot est dans la liste de mot de la question
+                tfidf= dico_tf[matrice[i][0]]*dico_idf[matrice[i][0]] # La variable tfidf prend la valeur du du tf du mot dans la question multiplié par le idf du mot dans le corpus
+            else:
+                tfidf= 0.0 # Sinon la variable prend la valeur 0.0
+            vecteur_question.append(tfidf) # On ajoute la valeur de la variable tfidf au vecteur de la question
+        return vecteur_question
+    
+    def produit_scalaire(A,B):
+        prod = 0
+        for i in range(len(A)):
+            prod += A[i] * B[i]
+        return prod
+    
+    def norme(L):
+        norme = 0
+        for i in range(len(L)):
+            norme += L[i] **2
+        norme = sqrt(norme)
+        return norme
+    
+    def similarite(A, B):
+        prod = produit_scalaire(A,B)
+        norme_A = norme(A)
+        norme_B = norme(B)
+        similariter = prod/(norme_A * norme_B)
+        return similariter
+    
+    def proximite(question,repertoir):
+        matrice=matrice_tf_idf('cleaned')
+        vecteur_q = calcul_vecteur_tf_idf(question,transposee(matrice))
+        max=0
+        for ligne in range(1,len(matrice)): #On ne parcourt pas la première sous liste car elle contient tous les mots du corpus
+            vrai_ligne= matrice[ligne][1:] # On ne prend pas le 1er el de la sous liste car il correspond au nom du fichier
+            simil=similarite(vecteur_q,vrai_ligne)
+            if simil > max:
+                max=simil
+                i_max=ligne
+        return matrice[i_max][0]
+    
+    def mot_question_important(question, repertoir):
+        matrice=transposee(matrice_tf_idf(repertoir))
+        tf_idf_question = calcul_vecteur_tf_idf(question,transposee(matrice_tf_idf(repertoir)))
+        max=0
+        for i in range(len(tf_idf_question)):
+            if tf_idf_question[i]>max:
+                max=tf_idf_question[i]
+                indice= i+1
+        return matrice[indice][0]
+    
+    def phrase_reponse(question):
+        mot_pertinent=mot_question_important(question,'cleaned')
+        doc_pertinent=proximite(question,'cleaned')
+        liste_phrase=[]
+        contenu_vrai=""
+        phrase_pertinente=[]
+        with open(os.path.join('speeches',doc_pertinent),"r",encoding='utf-8') as doc:
+            contenu = doc.read()
+            for car in contenu:
+                if car != '\n':
+                    contenu_vrai+=car
+            phrases=contenu_vrai.split(".")
+            for phrase in phrases:
+                if mot_pertinent in phrase:
+                    phrase_pertinente.append(phrase)
+        return phrase_pertinente[0]
+    
+    def affiner_reponse(question):
+        question_deca = trav(question)
+        reponse_base = phrase_reponse(question)
+        if reponse_base[len(reponse_base) -1] != '.':
+            reponse_base += '.'
+        if 'comment' in question_deca:
+            reponse_affine = 'Après analyse,'
+        if 'pourquoi' in question_deca:
+            reponse_affine = 'Car'
+        if 'peux tu' in question_deca:
+            reponse_affine = 'Oui, bien-sûr!'
