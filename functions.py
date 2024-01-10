@@ -8,12 +8,12 @@ from math import sqrt
 class Part1:
     def __init__(self,repertoir):
         self.repertoir = repertoir
-        self.dico_score_tf = {}
-        self.dico_score_idf = {}
-        self.dico = {}
-        self.dico_score_final = {}
-        self.dico2 = {}
-        self.dico3 = {}
+        self.dico_score_tf = {}  # Dictionnaire des scores tf
+        self.dico_score_idf = {}  # Dictionnaire des scores idf
+        self.dico = {}  #Calculer l'occurrence de chaque mot dans le corpus
+        self.dico_score_final = {}  #Score tf idf du corpus
+        self.dico2 = {}  #Score tf idf de chaque mot dans chaque document
+        self.dico3 = {}  #Calculer l'occurrence de chaque mot dans chaque document
 
 
     def rename(self):
@@ -213,248 +213,144 @@ class Part1:
                 print("Les présidents qui ont parlé de climat sont ",president, ":", self.dico3[president]['climat'])
             elif 'écologie' in self.dico3[president]:
                 print("Les présidents qui ont parlé de écologie sont ",president,':', self.dico3[president]['écologie'])
+                
 class Part2:
 
-    def trav(contenu):
-        nv_contenu = ""
-        for lettre in contenu :
-            if 65 <= ord(lettre) <=  90 :
-                nv_contenu += chr(ord(lettre)+32)
-            elif (33 <= ord(lettre) <= 47) or (58 <= ord(lettre) <= 63) or (91 <= ord(lettre) <= 96) or (123 <= ord(lettre) <= 126):
-                nv_contenu += " "
-            else:
-                nv_contenu += lettre
-        return nv_contenu 
+    def __init__(self): #Fonction pour tout initialiser à 0
+        self.nv_contenu = ""
+        self.liste_v = [] #Liste de mot dans la question
+        self.noms = []  #
+        self.dico_occur = {}
+        self.dict_occ = {}
+        self.vecteur_question = [] #Liste pour
+        self.Liste_Vec_Chaque_Doc = []  #Liste des vecteurs de chaque doc
+        self.Liste_produit_scalaire = []  #Liste des produits scalaires de chaque vecteur
+        self.Liste_Norme_Vecteur = [] #Liste des normes de chaque vecteur
+        self.Liste_similarite_cos = []
 
-    def tokenisation(question):
-        question_trav = trav(question)
+
+
+
+    def trav(self,question): #Fonction pour mettre en minuscule les majuscules et supprimer les ponctuations ou remplacer par des espaces
+        self.question = question
+        for lettre in self.question :
+            if lettre in ["'","-","_",","]:
+                self.nv_contenu += " "
+            elif lettre not in ['?','!',".",":",'"',';']:
+                self.nv_contenu += lettre.lower()
+
+
+    def tokenisation(self): #Fonction qui sépare la question et met tout dans une liste
+        question_trav = self.nv_contenu
         liste = question_trav.split()
-        liste_v=[]
         for val in liste:
-            if val not in liste_v:
-                liste_v.append(val)
-        return liste_v
+            if val not in self.liste_v:
+                self.liste_v.append(val)
 
-    def liste_fichier(repertoir,extension):
-        noms=[]
-        for nom in os.listdir(repertoir):
-            if nom.endswith(extension):
-                noms.append(nom)
-        return noms
-    
-    if not os.path.exists('cleaned'):
-        os.mkdir('cleaned')
-        cleaned_dir='cleaned'
-        liste=liste_fichier('speeches','txt')
-        for nom in liste:
-            nv_fichier=os.path.join(cleaned_dir,nom)
-            with open(os.path.join("speeches",nom),"r") as speeches, open(nv_fichier,"w") as cleaned_fichier:
-                for ligne in speeches:
-                    nv_ligne=trav(ligne)
-                    cleaned_fichier.write(nv_ligne)
-    
-    
-    def occur(texte):
-        liste_mot=texte.split()
-        dico_occur={}
+    def MotQuestionCorpus(self,dico): #Fonction pour supprimer les mots de la question qui ne sont pas dans le corpus
+        self.Liste = []
+        ListeVerif = self.liste_v
+        for mot in ListeVerif:
+            if mot not in dico:
+                self.Liste.append(mot)
+
+    def liste_fichier(self): #Fonction pour afficher la liste du répertoir
+        for nom in os.listdir("cleaned"):
+            if nom.endswith('.txt'):
+                self.noms.append(nom)
+
+    def occur(self):
+        liste_mot = self.nv_contenu.split()
         for val in liste_mot:
-            if val not in dico_occur.keys():
-                dico_occur[val]=1
+            if val not in self.dico_occur.keys():
+                self.dico_occur[val] = 1
             else: 
-                dico_occur[val]+=1
-        return dico_occur
-    
-    def tf(fichier):
-        with open(fichier,"r",encoding='utf-8') as f:
-            txt = f.read()
-            nb= len(txt.split())
-            dict_occ = occur(txt)
-            for cle, val in dict_occ.items():
-                dict_occ[cle]= val/nb
-        return dict_occ
-    
-    def idf(repertoir):
-        fichiers= os.listdir(repertoir)
-        dico_idf={}
-        liste_texte=[]
-        liste_bis=[]
-        nb=len(fichiers)
-        for nom in fichiers:
-            with open(os.path.join(repertoir,nom),"r",encoding='utf-8')as f:
-                contenu= f.read()
-                liste_mot=contenu.split()
-            liste_texte.append(liste_mot)
-        for liste in liste_texte:
-            nvliste=[]
-            for val in liste:
-                if val not in nvliste:
-                    nvliste.append(val)
-            liste_bis.append(nvliste)
-        for liste in liste_bis:
-            for mot in liste:
-                if mot not in dico_idf.keys():
-                    dico_idf[mot]=1
-                else:
-                    dico_idf[mot]+=1
-    
-        for cle, val in dico_idf.items():
-            dico_idf[cle]=log((nb/val),10)
-        return dico_idf
-    
-    
-    def transposee(matrice): 
-        r=[]
-        for nbCol in range(len(matrice[0])):
-            ligneM=[]
-            for ligne in range(len(matrice)):
-                ligneM.append(matrice[ligne][nbCol])
-            r.append(ligneM)
-        return r
-    
-    def matrice_tf_idf(repertoir):
-        matrice=[]
-        mots = list(idf(repertoir).keys())
-        ligne_mot=["mots:"]
-        for mot in mots:
-            ligne_mot.append(mot)
-        matrice.append(ligne_mot)
-        s_idf = idf(repertoir)
-        for fichier in liste_fichier(repertoir,extension="txt"):
-            colonne=[fichier]
-            fichier='cleaned/'+fichier
-            s_tf=tf(fichier)
-            s_tf_idf={}
-            for mot in s_idf.keys():
-                if mot in s_tf.keys():
-                    s_tf_idf[mot]=s_tf[mot]*s_idf[mot]
-                else:
-                    s_tf_idf[mot]= 0.0
-            ligne_tf_idf=colonne
-            for score in s_tf_idf.values():
-                ligne_tf_idf.append(score)
-            matrice.append(ligne_tf_idf)
-        return matrice
-    
-    def tokenisation(question):
-        question_trav = trav(question)
-        liste = question_trav.split()
-        liste_v=[]
-        for val in liste:
-            if val not in liste_v:
-                liste_v.append(val)
-        return liste_v
-    
-    
-    
-    def motquestioncorpus(question,repertoir):
-        liste_v = tokenisation(question)
-        fichiers= os.listdir(repertoir)
-        liste_texte=[]
-        contenu_global=[]
-        liste_mot_commun =[]
-        for nom in fichiers:
-            with open(os.path.join(repertoir,nom),"r",encoding='utf-8') as f:
-                contenu = f.read()
-                liste_texte = contenu.split()
-            contenu_global += liste_texte
-        for i in range(len(liste_v)):
-            if liste_v[i] in contenu_global:
-                liste_mot_commun.append(liste_v[i])
-        return liste_mot_commun
-      
-    
-    
-    
-    def tf_question(question):
-        dico_tf=occur(question)
-        nb = len(question.split())
-        for key, val in dico_tf.items():
-            dico_tf[key]=val/nb
-        return dico_tf
-    
-    
-    def calcul_vecteur_tf_idf(question,matrice): #renvoie le vecteur sous forme de liste
-        """Cette fonction prend en paramètre la question et la matriceTFIDF du répertoire et renvoie le vecteur TF_IDF
-        de la question sous forme de liste. On note que l'ordre des TF_IDF correspond à l'ordre de ceux de la matrice"""
-        dico_idf = idf('cleaned') # Dictionnaire contenant l'IDF des mots du répetoire cleaned
-        dico_tf = tf_question(trav(question)) # Dictionnaire contenant le TF des mots de la question convertie en minuscule et sans caractère spéciaux
-        vecteur_question=[]
-        liste_question= tokenisation(question) # Liste contenant tous les mots de la question (en minuscule)
-        for i in range(1,len(matrice)):
-            if matrice[i][0] in liste_question: # Si le premier terme de la sous liste de la matrice soit le mot est dans la liste de mot de la question
-                tfidf= dico_tf[matrice[i][0]]*dico_idf[matrice[i][0]] # La variable tfidf prend la valeur du du tf du mot dans la question multiplié par le idf du mot dans le corpus
+                self.dico_occur[val] += 1
+
+    def tf(self):
+        self.nb = len(self.liste_v)
+        for cle, val in self.dico_occur.items():
+            if cle in self.Liste:
+                self.dict_occ[cle] = 0
             else:
-                tfidf= 0.0 # Sinon la variable prend la valeur 0.0
-            vecteur_question.append(tfidf) # On ajoute la valeur de la variable tfidf au vecteur de la question
-        return vecteur_question
-    
-    def produit_scalaire(A,B):
-        prod = 0
-        for i in range(len(A)):
-            prod += A[i] * B[i]
-        return prod
-    
-    def norme(L):
+                self.dict_occ[cle] = val/self.nb
+
+
+    def idf(self,dico_idf_Part1): #Fonction pour chercher le score idf des mots dans la partie 1
+        self.dico_idf = self.dico_occur
+        for cle, val in self.dico_idf.items():
+            if cle in dico_idf_Part1:
+                self.dico_idf[cle] = dico_idf_Part1[cle]
+            else:
+                self.dico_idf[cle] = 0
+
+    def calcul_vecteur_tf_idf(self):
+        """Cette fonction renvoie le vecteur TF_IDF de la question sous forme de liste.
+        On note que l'ordre des TF_IDF correspond à l'ordre de ceux de la matrice"""
+        for mot in self.liste_v:
+            self.vecteur_question.append(
+                self.dico_idf[mot] * self.dict_occ[mot])  # On calcule le tfidf de chaque mot de la question
+
+    def matrice_tf_idf(self,dico_occ_chaque_doc,dico_score_tfidf_chaque_doc): #
+        for president in dico_occ_chaque_doc:
+            Liste_Vec_president = []
+            for mot in self.liste_v:
+                if mot in dico_occ_chaque_doc[president]:
+                    Liste_Vec_president.append(dico_score_tfidf_chaque_doc[president][mot])  #Ajouter le score tfidf de chaque mot de la question de chaque doc
+                else:
+                    Liste_Vec_president.append(0)
+            self.Liste_Vec_Chaque_Doc.append(Liste_Vec_president)
+
+    def produit_scalaire(self):
+        for vecteur in self.Liste_Vec_Chaque_Doc:
+            prod = 0
+            for i in range(len(vecteur)):
+                prod += vecteur[i] * self.vecteur_question[i]
+            self.Liste_produit_scalaire.append(prod)
+
+
+    def norme(self):
+        for vecteur in self.Liste_Vec_Chaque_Doc:
+            norme = 0
+            for i in range(len(vecteur)):
+                norme += vecteur[i] **2
+            self.Liste_Norme_Vecteur.append(sqrt(norme))
+
         norme = 0
-        for i in range(len(L)):
-            norme += L[i] **2
-        norme = sqrt(norme)
-        return norme
-    
-    def similarite(A, B):
-        prod = produit_scalaire(A,B)
-        norme_A = norme(A)
-        norme_B = norme(B)
-        similariter = prod/(norme_A * norme_B)
-        return similariter
-    
-    def proximite(question,repertoir):
-        matrice=matrice_tf_idf('cleaned')
-        vecteur_q = calcul_vecteur_tf_idf(question,transposee(matrice))
-        max=0
-        for ligne in range(1,len(matrice)): #On ne parcourt pas la première sous liste car elle contient tous les mots du corpus
-            vrai_ligne= matrice[ligne][1:] # On ne prend pas le 1er el de la sous liste car il correspond au nom du fichier
-            simil=similarite(vecteur_q,vrai_ligne)
-            if simil > max:
-                max=simil
-                i_max=ligne
-        return matrice[i_max][0]
-    
-    def mot_question_important(question, repertoir):
-        matrice=transposee(matrice_tf_idf(repertoir))
-        tf_idf_question = calcul_vecteur_tf_idf(question,transposee(matrice_tf_idf(repertoir)))
-        max=0
-        for i in range(len(tf_idf_question)):
-            if tf_idf_question[i]>max:
-                max=tf_idf_question[i]
-                indice= i+1
-        return matrice[indice][0]
-    
-    def phrase_reponse(question):
-        mot_pertinent=mot_question_important(question,'cleaned')
-        doc_pertinent=proximite(question,'cleaned')
-        liste_phrase=[]
-        contenu_vrai=""
-        phrase_pertinente=[]
-        with open(os.path.join('speeches',doc_pertinent),"r",encoding='utf-8') as doc:
-            contenu = doc.read()
-            for car in contenu:
-                if car != '\n':
-                    contenu_vrai+=car
-            phrases=contenu_vrai.split(".")
-            for phrase in phrases:
-                if mot_pertinent in phrase:
-                    phrase_pertinente.append(phrase)
-        return phrase_pertinente[0]
-    
-    def affiner_reponse(question):
-        question_deca = trav(question)
-        reponse_base = phrase_reponse(question)
-        if reponse_base[len(reponse_base) -1] != '.':
-            reponse_base += '.'
-        if 'comment' in question_deca:
-            reponse_affine = 'Après analyse,'
-        if 'pourquoi' in question_deca:
-            reponse_affine = 'Car'
-        if 'peux tu' in question_deca:
-            reponse_affine = 'Oui, bien-sûr!'
+        for mot in self.vecteur_question:
+            norme += mot **2
+        self.Norme_Question = norme
+
+    def similarite(self): #Fonction pour calculer la similarité cosinus du vecteur de la question par rapport au vecteur de chaque document
+        for i in range(len(self.Liste_Norme_Vecteur)):
+            if self.Liste_Norme_Vecteur[i] * self.Norme_Question == 0:
+                self.Liste_similarite_cos.append(0)
+            else:
+                self.Liste_similarite_cos.append(self.Liste_produit_scalaire[i]/(self.Liste_Norme_Vecteur[i] * self.Norme_Question))
+
+    def proximite(self): # Fonction pour trouver la similarité la plus haute
+        similarite_haute = 0
+        for i in range(len(self.Liste_similarite_cos)):
+            if i == 0:
+                similarite_haute = self.Liste_similarite_cos[0]
+            elif self.Liste_similarite_cos[i] > similarite_haute:
+                similarite_haute = self.Liste_similarite_cos[i]
+        verif = 0
+        for i in self.Liste_similarite_cos:
+            if i == 0:
+                verif += 1
+        if verif == len(self.Liste_similarite_cos):
+            print("Aucun document n'est pertinent.")
+        else:
+            nom_doc_pertinent = self.noms[self.Liste_similarite_cos.index(similarite_haute)]  # Chercher la position de la similarité la plus haute dans la liste des similarités cosinus pour trouver la position du document pertinent dans la liste des fichiers
+            print("Le document le plus pertinent est : ",nom_doc_pertinent)
+
+
+"""
+    def transposee(self):
+        r = []
+        for nbCol in range(len(self[0])):
+            ligneM = []
+            for ligne in range(len(self)):
+                ligneM.append(self[ligne][nbCol])
+            r.append(ligneM)"""
