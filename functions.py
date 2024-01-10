@@ -458,3 +458,4 @@ class Part2:
             reponse_affine = 'Car'
         if 'peux tu' in question_deca:
             reponse_affine = 'Oui, bien-sûr!'
+        reponse_affine += " " + reponse_base
