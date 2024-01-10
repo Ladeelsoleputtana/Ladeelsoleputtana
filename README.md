@@ -34,7 +34,7 @@ En fonction des numéros attribués à chaque fonction cité ci-dessus, l'utilis
 - La fonction produit_scalaire sert à calculer le produit scalaire entre deux corpus.
 - La fonction norme sert à calculer la norme entre deux corpus.
 - La fonction similarite sert à calculer la similarité de cosinus entre deux corpus à l'aide de la fonction norme et de la fonction produit scalaire.
-- La fonction proximite permet de savoir quel texte est le plus apte à repondre à la question.
+- La fonction proximite permet de savoir quel texte est le plus apte à répondre à la question.
 - La fonction mot_question_important permet de trouver le mot ayant le meilleur score tf-idf.
 - La fonction phrase_reponse sert à trouver une réponse à partir de la fonction proximite et la fonction mot_question_important.
 - La fonction affiner_reponse sert à mieux firmuler la réponse.
