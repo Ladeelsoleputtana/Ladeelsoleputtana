@@ -6,7 +6,7 @@ Avant de faire le code, nous avons d'abord un dossier zippé avec les discours (
 Il faut extraire ce dossier et à l'aide des fonctions qu'on va développer, on aura un chatBot qui pourra répondre aux questions en dépendant de la fréquence des mots dans le corpus.
 Le code est réparti en 3 parties: 
 - Partie 1 : Développement des fonctions de base.
-Dans cette première partie, on doit d'abord créer des fonctions de bases qui permet de remplacer les fichiers de base en des fichiers n'ayant plus de majuscules, ni de ponctuations telles que les virgules, les points, etc.
+Dans cette première partie, on doit d'abord créer des fonctions de bases qui permettent de remplacer les fichiers de base en des fichiers n'ayant plus de majuscules, ni de ponctuations telles que les virgules, les points, etc.
 Une fois modifié, il faut déplacer ces nouveaux fichiers dans un nouveau dossier nommé "cleaned" en faisant attention aux doublons et afficher les noms prénoms des présidents dans la console.
 La fonction qui jouera un rôle majeur dans ce projet est le TF-IDF. Cette fonction est d'abord séparé en 2:
   - La fonction TF permet de mesurer la fréquence de chaque mot dans le corpus, c'est-à-dire, le nombre de fois que le mot apparaît dans chaque document du corpus. Plus le mot apparaît, plus son score TF est          élevé.
@@ -22,6 +22,21 @@ Ensuite, on passe aux fonctionnalités à développer. C'est aussi ici où on cr
 En fonction des numéros attribués à chaque fonction cité ci-dessus, l'utilisateur pourra donc entrer le numéro pour avoir la réponse qu'il souhaite.
 
 - Partie 2 : Calcul de la matrice de similarité et la génération de réponses automatiques.
-
+  
+- La fonction trav sert à retirer les caractèress spéciaux des textes afin qu'il soit compatible pour la tokenisation.
+- La fonction tokenisation nous permet de traiter la question comme pour les documents du corpus.
+- la fonction motquestioncorpus sert à faire a faire une liste des mots présent a la fois dans le corpus et dans la question.
+- la fonction idf permet de chercher le score idf des mots dans la partie 1.
+- la fonction occur nous permet de savoir combien de fois un mot apparait dans le corpus.
+- la fonction tf permet de calcuer le score tf de chaque mot dans une question.
+- la fonction matrice_tf_idf sert a créer une mmatruce qui regroupe les scores des mots présent dans le corpus
+- La fonction calcul_vecteur_tf_idf prend en paramètre la question et la matrice TF-IDF du répertoire et renvoie le vecteur TF_IDF de la question sous forme de liste. On note que l'ordre des TF_IDF correspond à l'ordre de ceux de la matrice.
+- La fonction produit_scalaire sert à calculer le produit scalaire entre deux corpus.
+- La fonction norme sert à calculer la norme entre deux corpus.
+- La fonction similarite sert à calculer la similarité de cosinus entre deux corpus à l'aide de la fonction norme et de la fonction produit scalaire.
+- La fonction proximite permet de savoir quel texte est le plus apte à repondre à la question.
+- La fonction mot_question_important permet de trouver le mot ayant le meilleur score tf-idf.
+- La fonction phrase_reponse sert à trouver une réponse à partir de la fonction proximite et la fonction mot_question_important.
+- La fonction affiner_reponse sert à mieux firmuler la réponse.
 - Partie 3 : Généralisation de l'application pour couvrir divers thèmes.
 Cette partie ne sera pas réaliser.
