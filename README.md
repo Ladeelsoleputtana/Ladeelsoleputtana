@@ -23,20 +23,20 @@ En fonction des numéros attribués à chaque fonction cité ci-dessus, l'utilis
 
 - Partie 2 : Calcul de la matrice de similarité et la génération de réponses automatiques.
   
-- La fonction trav sert à retirer les caractèress spéciaux des textes afin qu'il soit compatible pour la tokenisation.
+- La fonction trav sert à retirer les caractères spéciaux des textes afin qu'il soit compatible pour la tokenisation.
 - La fonction tokenisation nous permet de traiter la question comme pour les documents du corpus.
-- la fonction motquestioncorpus sert à faire a faire une liste des mots présent a la fois dans le corpus et dans la question.
-- la fonction idf permet de chercher le score idf des mots dans la partie 1.
-- la fonction occur nous permet de savoir combien de fois un mot apparait dans le corpus.
-- la fonction tf permet de calcuer le score tf de chaque mot dans une question.
-- la fonction matrice_tf_idf sert a créer une mmatruce qui regroupe les scores des mots présent dans le corpus
-- La fonction calcul_vecteur_tf_idf prend en paramètre la question et la matrice TF-IDF du répertoire et renvoie le vecteur TF_IDF de la question sous forme de liste. On note que l'ordre des TF_IDF correspond à l'ordre de ceux de la matrice.
+- La fonction MotQuestionCorpus sert à faire une liste des mots présent à la fois dans le corpus et à la fois dans la question.
+- La fonction idf permet de chercher le score idf des mots dans la partie 1.
+- La fonction occur nous permet de savoir combien de fois un mot apparaît dans le corpus.
+- La fonction tf permet de calculer le score tf de chaque mot dans une question.
+- La fonction matrice_tf_idf sert a créer une mmatruce qui regroupe les scores des mots présent dans le corpus
+- La fonction calcul_vecteur_tf_idf prend en paramètre la question et la matrice TF-IDF du répertoire et renvoie le vecteur TF_IDF de la question sous forme de liste. On note que l'ordre des TF_IDF correspond à l'ordre de celles de la matrice.
 - La fonction produit_scalaire sert à calculer le produit scalaire entre deux corpus.
 - La fonction norme sert à calculer la norme entre deux corpus.
 - La fonction similarite sert à calculer la similarité de cosinus entre deux corpus à l'aide de la fonction norme et de la fonction produit scalaire.
 - La fonction proximite permet de savoir quel texte est le plus apte à répondre à la question.
 - La fonction mot_question_important permet de trouver le mot ayant le meilleur score tf-idf.
-- La fonction phrase_reponse sert à trouver une réponse à partir de la fonction proximite et la fonction mot_question_important.
-- La fonction affiner_reponse sert à mieux firmuler la réponse.
+- La fonction phrase_reponse sert à trouver une réponse à partir de la fonction proximité et la fonction mot_question_important.
+- La fonction affiner_reponse sert à mieux formuler la réponse.
 - Partie 3 : Généralisation de l'application pour couvrir divers thèmes.
 Cette partie ne sera pas réaliser.
