@@ -33,4 +33,18 @@ while boom == 1:
     elif Choix_menu == 7:
         boom = 0
 
-part2 = Part2
+
+part2 = Part2()
+part2.trav(input("Posez une question : "))
+part2.tokenisation()
+part2.MotQuestionCorpus(part1.dico)
+part2.liste_fichier()
+part2.occur()
+part2.tf()
+part2.idf(part1.dico_score_idf)
+part2.calcul_vecteur_tf_idf()
+part2.matrice_tf_idf(part1.dico3,part1.dico2)
+part2.produit_scalaire()
+part2.norme()
+part2.similarite()
+part2.proximite()
